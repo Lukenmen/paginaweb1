@@ -2,42 +2,122 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Botón Rojo/Verde</title>
+  <title>Explosión Épica Nivel Dios</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      display: flex;
+      margin: 0;
       height: 100vh;
+      background-color: #0d0d0d;
+      display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #f0f0f0;
-      font-family: Arial, sans-serif;
+      overflow: hidden;
+      font-family: 'Arial', sans-serif;
+      position: relative;
     }
 
     #colorButton {
-      padding: 20px 40px;
-      font-size: 18px;
+      padding: 25px 50px;
+      font-size: 22px;
       background-color: red;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 14px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.5s ease, transform 0.3s ease;
+      z-index: 2;
+      animation: pulse 2s infinite ease-in-out;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
     }
 
     #colorButton.green {
       background-color: green;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+    }
+
+    #colorButton:active {
+      transform: scale(1.1);
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    .particle {
+      position: fixed;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background-color: yellow;
+      opacity: 1;
+      pointer-events: none;
+      animation: explodeParticle 1.5s ease-out forwards;
+      z-index: 1;
+    }
+
+    @keyframes explodeParticle {
+      to {
+        transform: translate(var(--x), var(--y)) scale(0.3);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
 
-  <button id="colorButton">Haz clic en mí</button>
+  <button id="colorButton">¡Hazme explotar!</button>
 
   <script>
     const button = document.getElementById('colorButton');
 
     button.addEventListener('click', () => {
+      // Cambiar color del botón
       button.classList.toggle('green');
+
+      // Obtener posición del botón
+      const rect = button.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      // Generar partículas (explosión grande)
+      const totalParticles = 100; // Muchas partículas
+      for (let i = 0; i < totalParticles; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+
+        // Posición inicial
+        particle.style.left = `${centerX}px`;
+        particle.style.top = `${centerY}px`;
+
+        // Dirección aleatoria exagerada
+        const angle = Math.random() * 2 * Math.PI;
+        const radius = Math.random() * 800 + 200; // 10x más grande que antes
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+
+        particle.style.setProperty('--x', `${x}px`);
+        particle.style.setProperty('--y', `${y}px`);
+
+        // Colores explosivos
+        const colors = ['#ffea00', '#ff5722', '#f44336', '#ff9800', '#ffffff', '#00e5ff', '#00ff6a'];
+        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+        document.body.appendChild(particle);
+
+        // Eliminar después de la animación
+        setTimeout(() => {
+          particle.remove();
+        }, 1500);
+      }
     });
   </script>
 
