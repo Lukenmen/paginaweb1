@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Botón Rojo/Verde</title>
+  <style>
+    body {
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+
+    #colorButton {
+      padding: 20px 40px;
+      font-size: 18px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #colorButton.green {
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="colorButton">Haz clic en mí</button>
+
+  <script>
+    const button = document.getElementById('colorButton');
+
+    button.addEventListener('click', () => {
+      button.classList.toggle('green');
+    });
+  </script>
+
+</body>
+</html>
